@@ -65,6 +65,8 @@ spec:
             # Allows host volume mounts from buildkite-agent → docker-dind
             - name: buildkite-builds
               mountPath: /buildkite/builds
+            - name: buildkite-hooks
+              mountPath: /buildkite/hooks
             {{- if .Values.registryCreds.gcrServiceAccountKey }}
             - name: service-key
               mountPath: /etc/service_key
@@ -80,6 +82,9 @@ spec:
         #     path: /var/run/docker.sock
         - name: buildkite-builds
           emptyDir: {}
+        - name: buildkite-hooks
+          configMap:
+            name: {{ template "fullname" . }}-hooks
         {{- if .Values.registryCreds.gcrServiceAccountKey }}
         - name: service-key
           secret:

@@ -1,0 +1,17 @@
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-hooks
+  labels:
+    app: {{ template "name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+kind: ConfigMap
+data:
+  environment: |
+    #!/bin/usr/env bash
+
+    set -eu
+    echo '--- Setting up the environment'
+
+    export BUILDKITE_ARTIFACT_UPLOAD_DESTINATION="gs://$BUCKECT_ARTIFACTS_BUCKET/$BUILDKITE_JOB_ID"
